@@ -41,15 +41,75 @@ function setAlternativesNumsSelectedHandler() {
 
 
 function processAndCreateTables() {
-    createTopLevelTable();
-
+    $('top-lvl-table-container').html('');
+    $('lower-lvl-tables-container').html('');
+    createTable("top-lvl-table-container", "top-lvl-loc-prior", targetTitle, criteriaArr);
+    for (let i=0; i < criteriaArr.length; i++){
+        createTable("lower-lvl-tables-container", "loc-prior-table"+i, criteriaArr[i], alternativesArr);
+    }
+    //  createTopLevelTable();
 }
 
-//function createTable(tableContainer, tableId, ) {
-//    let tabletag = '<table id="'+tableId+'" class="table table-hover"></table>';
-//    $('#top-lvl-table-container').html(tabletag);
-//}
+function createTable(tableContainerId, tableId, tableTitle, columnsArray) {
+    let tabletag = '<table id="'+tableId+'" class="table table-hover"></table>';
+    let tableContainer = $('#'+tableContainerId);
+    tableContainer.html(tableContainer.html() + tabletag);
+    //alert(tableContainerId);
+    let out = "";
+    out += '<tr class="thread-light">' +
+        '<th>' + tableTitle + '</th> ';
+    for (let cr of columnsArray){
+        out += '<th>'+ cr +'</th>'
+    }
+    out += '</tr>';
+    for (let rowtitle of columnsArray){
+        out += '<tr><td>'+ rowtitle +'</td>';
+        for (let rowcol of columnsArray){
+            if (rowtitle === rowcol){
+                out += '<td><select disabled><option>1</option></select></td>';
+            }
+            else{
+                out += '<td><select class="loc-pr-select">' +
+                    '<option>9</option>' +
+                    '<option>8</option>' +
+                    '<option>7</option>' +
+                    '<option>6</option>' +
+                    '<option>5</option>' +
+                    '<option>4</option>' +
+                    '<option>3</option>' +
+                    '<option>2</option>' +
+                    '<option>1</option>' +
+                    '<option>1/2</option>' +
+                    '<option>1/3</option>' +
+                    '<option>1/4</option>' +
+                    '<option>1/5</option>' +
+                    '<option>1/6</option>' +
+                    '<option>1/7</option>' +
+                    '<option>1/8</option>' +
+                    '<option>1/9</option>' +
+                    '</select></td>';
+            }
+        }
+        out+='</tr>';
+    }
+    $('#'+tableId).html(out);
+    //automatically select converse value
+    $('.loc-pr-select').change(function () {
+        let curr = $(this).val();
+        let newVal = '';
+        if(curr.toString().includes('/')){
+            newVal = curr.split('/')[1];
+        }else {
+            newVal = '1/'+curr;
+        }
+        let rowInd = parseInt($(this).closest('tr').index());
+        let colInd = parseInt($(this).closest('td').index());
+        let table = document.getElementById($(this).closest('table').attr('id'));
+        table.rows[colInd].cells[rowInd].firstChild.value = newVal;
+    });
 
+}
+/*
 function createTopLevelTable() {
     let tabletag = '<table id="top-lvl-loc-prior" class="table table-hover"></table>';
     $('#top-lvl-table-container').html(tabletag);
@@ -107,6 +167,7 @@ function createTopLevelTable() {
         table.rows[colInd].cells[rowInd].firstChild.value = newVal;//.УСТНОВИТИ ЗНАЧЕННЯ НЕВВАЛ
     });
 }
+*/
 
 //first
 function setDefineButtonHandler() {
