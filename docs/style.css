@@ -7,6 +7,14 @@
     margin-top: 2em;
 }
 
-.form-define .container-content{
-    margin-bottom: 5em;
+.form-define{
+    margin-bottom: 25em;
+}
+
+.margin-bottom{
+    margin-bottom: 8em;
+}
+
+.text-bold{
+    font-weight: bold;
 }

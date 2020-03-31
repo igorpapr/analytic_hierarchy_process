@@ -1,6 +1,12 @@
+//Made by Ihor Paprotskyi, SE, FI-3, NaUKMA
 let targetTitle = '';
 let criteriaArr = [];
 let alternativesArr = [];
+//dictionary of indexOfRow : Component of normalized vector of top-level table
+let topLevelTableRowComponentDict = {};
+
+//array of dictionaries of indexOfRow : Component of normalized vector of all the lower-level tables
+let lowerLevelTableDicts = [];
 
 //main
 $('document').ready(function () {
@@ -43,13 +49,82 @@ function setAlternativesNumsSelectedHandler() {
 function processAndCreateTables() {
     $('top-lvl-table-container').html('');
     $('lower-lvl-tables-container').html('');
-    createTable("top-lvl-table-container", "top-lvl-loc-prior", targetTitle, criteriaArr);
+    createTable("top-lvl-table-container", "top-lvl-loc-prior", targetTitle, criteriaArr, 'top-lvl-');
+    calculateConsistency('top-lvl-');
     for (let i=0; i < criteriaArr.length; i++){
-        createTable("lower-lvl-tables-container", "loc-prior-table"+i, criteriaArr[i], alternativesArr);
+        createTable("lower-lvl-tables-container", "loc-prior-table"+i, criteriaArr[i], alternativesArr, 'low-lvl-'+i);
     }
 }
 
-function createTable(tableContainerId, tableId, tableTitle, columnsArray) {
+function calculateConsistency(infoPrefix) {
+    fillComponentDictionary('top-lvl-loc-prior', topLevelTableRowComponentDict);
+    let table = document.getElementById('top-lvl-loc-prior');
+    //sums of every column
+    let colSums = [];
+    for (let col = 1; col < table.rows[0].cells.length; col++){
+        let column = [];
+        for (let row = 1; row < table.rows.length; row++){
+            column.push(customParseInt(table.rows[row].cells[col].firstChild.value));
+        }
+        colSums.push(column.reduce((a, b) => a + b, 0));
+    }
+    //every column sum * component from dictionary
+    let tempSums = [];
+    for (let i = 0; i < colSums.length; i++){
+        tempSums.push(colSums[i] * topLevelTableRowComponentDict[i+1]);
+    }
+    //console.log('tempSums');
+    //console.log(tempSums);
+    let lambdaMax = tempSums.reduce((a, b) => a + b, 0);
+
+    let n = criteriaArr.length;
+    //Consistency index
+    let CI = (lambdaMax - n)/ (n - 1);
+    //Random Consistency value
+    const RCV = {
+        1: 0,
+        2: 0,
+        3: 0.58,
+        4: 0.9,
+        5: 1.12,
+        6: 1.24,
+        7: 1.32,
+        8: 1.41,
+        9: 1.45,
+        10: 1.49
+    };
+    //Consistency value
+    let CV = CI / RCV[n];
+    $('#'+infoPrefix+'lm').html(lambdaMax);
+    $('#'+infoPrefix+'ci').html(CI);
+    $('#'+infoPrefix+'cv').html(CV);
+
+}
+
+function fillComponentDictionary(tableId, dict) {
+    let table = document.getElementById(tableId);
+    let rows = table.rows;
+    //semi-component - geometrical mean of all cells in a row
+    let semiComponents = [];
+    for (let ind = 1; ind < rows.length; ind++){
+        let cells = rows[ind].cells;
+        let cellsarr = [];
+        for (let cellind = 1; cellind < cells.length; cellind++){
+            cellsarr.push(customParseInt(cells[cellind].firstChild.value));
+        }
+        //geometrical mean
+        semiComponents.push(Math.pow(cellsarr.reduce((a, b) => a * b, 1), 1 / (cellsarr.length)));
+    }
+    let sumOfSemiComponents = semiComponents.reduce((a, b) => a + b, 0);
+    //Carefully, from 1!!!
+    for (let i = 1; i < rows.length; i++){
+        dict[i] = semiComponents[i-1] / sumOfSemiComponents;
+    }
+    //console.log("Dictionary: ");
+    //console.log(dict);
+}
+
+function createTable(tableContainerId, tableId, tableTitle, columnsArray, infoIdPrefix) {
     let tabletag = '<table id="'+tableId+'" class="table table-hover"></table>';
     let tableContainer = $('#'+tableContainerId);
     tableContainer.html(tableContainer.html() + tabletag);
@@ -92,6 +167,8 @@ function createTable(tableContainerId, tableId, tableTitle, columnsArray) {
         out+='</tr>';
     }
     $('#'+tableId).html(out);
+
+    //setting handlers to
     //automatically select converse value
     $('.loc-pr-select').change(function () {
         let curr = $(this).val();
@@ -107,6 +184,17 @@ function createTable(tableContainerId, tableId, tableTitle, columnsArray) {
         table.rows[colInd].cells[rowInd].firstChild.value = newVal;
     });
 
+    //adding table info section
+    info = '<div class="info container">' +
+        '                            <div class="row">' +
+        '                                <!--max proper number-->' +
+        '                                <div class="col text-bold">λmax =' +
+        '                                    <span id="'+infoIdPrefix+'lm"></span></div>' +
+        '                                <div class="col text-bold">CI =' +
+        '                                    <span id="'+infoIdPrefix+'ci"></span></div>' +
+        '                                <div class="col text-bold">CV =' +
+        '                                    <span id="'+infoIdPrefix+'cv"></span></div></div></div>';
+    tableContainer.html(tableContainer.html() + info);
 }
 
 
