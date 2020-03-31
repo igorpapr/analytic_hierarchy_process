@@ -47,7 +47,6 @@ function processAndCreateTables() {
     for (let i=0; i < criteriaArr.length; i++){
         createTable("lower-lvl-tables-container", "loc-prior-table"+i, criteriaArr[i], alternativesArr);
     }
-    //  createTopLevelTable();
 }
 
 function createTable(tableContainerId, tableId, tableTitle, columnsArray) {
@@ -109,65 +108,7 @@ function createTable(tableContainerId, tableId, tableTitle, columnsArray) {
     });
 
 }
-/*
-function createTopLevelTable() {
-    let tabletag = '<table id="top-lvl-loc-prior" class="table table-hover"></table>';
-    $('#top-lvl-table-container').html(tabletag);
-    let out = "";
-    out += '<tr class="thread-light">' +
-        '<th>' + targetTitle + '</th> ';
-    for (let cr of criteriaArr){
-        out += '<th>'+ cr +'</th>'
-    }
-    out += '</tr>';
-    for (let rowtitle of criteriaArr){
-        out += '<tr><td>'+ rowtitle +'</td>';
-        for (let rowcol of criteriaArr){
-            if (rowtitle === rowcol){
-                out += '<td><select disabled><option>1</option></select></td>';
-            }
-            else{
-                out += '<td><select class="loc-pr-select">' +
-                    '<option>9</option>' +
-                    '<option>8</option>' +
-                    '<option>7</option>' +
-                    '<option>6</option>' +
-                    '<option>5</option>' +
-                    '<option>4</option>' +
-                    '<option>3</option>' +
-                    '<option>2</option>' +
-                    '<option>1</option>' +
-                    '<option>1/2</option>' +
-                    '<option>1/3</option>' +
-                    '<option>1/4</option>' +
-                    '<option>1/5</option>' +
-                    '<option>1/6</option>' +
-                    '<option>1/7</option>' +
-                    '<option>1/8</option>' +
-                    '<option>1/9</option>' +
-                    '</select></td>';
-            }
-        }
-        out+='</tr>';
-    }
-    $('#top-lvl-loc-prior').html(out);
-    //automatically select converse value
-    $('.loc-pr-select').change(function () {
-        let curr = $(this).val();
-        let newVal = '';
-        if(curr.toString().includes('/')){
-            newVal = curr.split('/')[1];
-        }else {
-            newVal = '1/'+curr;
-        }
 
-        let rowInd = parseInt($(this).closest('tr').index());
-        let colInd = parseInt($(this).closest('td').index());
-        let table = document.getElementById('top-lvl-loc-prior');
-        table.rows[colInd].cells[rowInd].firstChild.value = newVal;//.УСТНОВИТИ ЗНАЧЕННЯ НЕВВАЛ
-    });
-}
-*/
 
 //first
 function setDefineButtonHandler() {
