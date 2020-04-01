@@ -1,14 +1,28 @@
+body{
+    color: white;
+}
 .carousel-item{
     background-color: darkslategray;
     min-height: 42em;
 }
 
-.create-btn-1{
+.btn-1{
     margin-top: 2em;
+    margin-left: 2em;
+    margin-rigth: 2em;
+
+    min-width: fit-content;
+    position: center;
+}
+
+#calculate-button{
+    margin-top: 2em;
+    min-width: fit-content;
+    position: center;
 }
 
 .form-define{
-    margin-bottom: 25em;
+    margin-bottom: 8em;
 }
 
 .margin-bottom{
@@ -17,4 +31,10 @@
 
 .text-bold{
     font-weight: bold;
+}
+.info{
+    margin-bottom: 3em;
+}
+.width60{
+    width: 60%;
 }

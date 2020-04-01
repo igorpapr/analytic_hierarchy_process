@@ -10,10 +10,9 @@
 <body>
     <div id="carousel-main" class="carousel slide" data-interval="0" data-wrap="false">
         <ol class="carousel-indicators">
-            <li data-target="#carousel-main" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-main" data-slide-to="1"></li>
-            <li data-target="#carousel-main" data-slide-to="2"></li>
-            <li data-target="#carousel-main" data-slide-to="3"></li>
+            <li data-target="#carousel-main"  class="active"></li>
+            <li data-target="#carousel-main"> </li>
+            <li data-target="#carousel-main"> </li>
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -62,25 +61,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary col-1 create-btn-1" id="define-button">Create</button>
+                            <button type="submit" class="btn btn-primary col-1 btn-1" id="define-button">Create</button>
                         </form>
                     </div>
                 </div>
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Define your scheme</h5>
-                </div>
-            </div>
-            <div class="carousel-item">
-
-                <div class="container">
-                    <div class="d-md-block text-center">
-                        First <br>
-                        d s<br>
-                    </div>
-                </div>
-
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Scheme layout</h5>
                 </div>
             </div>
             <div class="carousel-item">
@@ -91,10 +77,16 @@
                         </div>
                         <hr>
                         <div id="top-lvl-table-container">
-
                         </div>
                         <hr>
                         <div id="lower-lvl-tables-container">
+                        </div>
+                    </div>
+                    <div class="width60 container">
+                        <div class="row">
+                            <button onclick="swipeBack(true)" class="btn col btn-danger btn-1">Change</button>
+                            <button onclick="proceedCalculation()" class="btn col btn-info btn-1" id="calculate-button">Calculate and check</button>
+                            <button onclick="swipeToFinish()" class="btn col btn-primary btn-1" id="finish-button">Next</button>
                         </div>
                     </div>
                 </div>
@@ -104,11 +96,23 @@
                 </div>
             </div>
             <div class="carousel-item">
-
-                <div class="container">
+                <div class="margin-bottom container">
                     <div class="d-md-block text-center">
-                        First <br>
-                        d s<br>
+                        <div class="display-4 text-center">
+                            Global priorities
+                        </div>
+                        <hr>
+                        <div class="container">
+                            <h5 id="result" class="text-center">
+                            </h5>
+                        </div>
+                        <div id="gl-prior-table-container">
+                            <table id="gl-prior-table" class="table table-hover table-bordered table-dark">
+
+                            </table>
+                        </div>
+                        <hr>
+                        <button onclick="swipeBack()" class="btn btn-danger btn-1" id="back-button">Back</button>
                     </div>
                 </div>
 
@@ -117,11 +121,11 @@
                 </div>
             </div>
         </div>
-        <a id="prev" class="carousel-control-prev" href="#carousel-main" role="button" data-slide="prev">
+        <a id="prev" class="carousel-control-prev" href="#carousel-main" role="button" data-slide="prev" hidden>
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </a>
-        <a id="next" class="carousel-control-next" href="#carousel-main" role="button" data-slide="next">
+        <a id="next" class="carousel-control-next" href="#carousel-main" role="button" data-slide="next" hidden>
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
